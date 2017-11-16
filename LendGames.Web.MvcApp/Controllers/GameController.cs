@@ -68,6 +68,8 @@ namespace LendGames.Web.MvcApp.Controllers
                     await _gameRepository.CreateOrEditAsync(game);
                     await db.SaveChangesAsync();
 
+                    ViewBag.Success = "Os dados do jogo foram salvos com sucesso.";
+                    TransportViewData();
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -103,6 +105,8 @@ namespace LendGames.Web.MvcApp.Controllers
                 _gameRepository.Delete(id);
                 await db.SaveChangesAsync();
 
+                ViewBag.Success = "O jogo foi removido com sucesso.";
+                TransportViewData();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

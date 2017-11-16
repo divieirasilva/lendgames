@@ -72,6 +72,8 @@ namespace LendGames.Web.MvcApp.Controllers
                     await _friendRepository.CreateOrEditAsync(friend);
                     await db.SaveChangesAsync();
 
+                    ViewBag.Success = "Os dados do amigo foram salvos com sucesso.";
+                    TransportViewData();
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -107,6 +109,8 @@ namespace LendGames.Web.MvcApp.Controllers
                 _friendRepository.Delete(id);
                 await db.SaveChangesAsync();
 
+                ViewBag.Success = "O amigo foi removido com sucesso.";
+                TransportViewData();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

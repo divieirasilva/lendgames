@@ -108,6 +108,8 @@ namespace LendGames.Web.MvcApp.Controllers
                     await _accountRepository.CreateOrEditAsync(account);
                     await db.SaveChangesAsync();
 
+                    ViewBag.Success = "Os dados da conta foram salvos com sucesso.";
+                    TransportViewData();
                     return RedirectToAction("Index");
                 }
                 catch (Exception ex)
@@ -143,6 +145,8 @@ namespace LendGames.Web.MvcApp.Controllers
                 await _accountRepository.DisableAsync(id);
                 await db.SaveChangesAsync();
 
+                ViewBag.Success = "A conta foi desativada com sucesso.";
+                TransportViewData();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -177,6 +181,8 @@ namespace LendGames.Web.MvcApp.Controllers
                 await _accountRepository.EnableAsync(id);
                 await db.SaveChangesAsync();
 
+                ViewBag.Success = "A conta foi ativada com sucesso.";
+                TransportViewData();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

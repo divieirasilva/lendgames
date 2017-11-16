@@ -23,5 +23,5 @@ function loadFriendsList(page) {
         }
     }).error(function (jqXHR, textStatus, errorThrown) {
         console.error(errorThrown);
-    });
+        });
 }

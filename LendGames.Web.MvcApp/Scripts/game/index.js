@@ -9,7 +9,7 @@ function loadGamesList(page) {
             page,
             search: $('#Search').val()
         },
-        async: true,        
+        async: true,
         beforeSend: function () {
             $('#GamesListHolder').html('');
             $('#GamesListHolder').addClass('loading-box');
@@ -23,5 +23,5 @@ function loadGamesList(page) {
         }
     }).error(function (jqXHR, textStatus, errorThrown) {
         console.error(errorThrown);
-    });
+    });    
 }

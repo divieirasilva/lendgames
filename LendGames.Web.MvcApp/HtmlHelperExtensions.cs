@@ -60,12 +60,15 @@ namespace LendGames.Web.MvcApp
                 }
 
                 TagBuilder tag = new TagBuilder("a");
-                tag.MergeAttribute("href", url);
+                
                 if (!string.IsNullOrEmpty(onClick))
                 {
                     tag.MergeAttribute("onclick", onClick);
                     tag.MergeAttribute("href", "#");
                 }
+                else                
+                    tag.MergeAttribute("href", url);
+                
                 tag.InnerHtml = display;
                 liTag.InnerHtml = tag.ToString();
             }
