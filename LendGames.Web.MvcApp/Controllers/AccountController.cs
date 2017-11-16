@@ -51,13 +51,13 @@ namespace LendGames.Web.MvcApp.Controllers
             return PartialView("_DashboardInfo", dashboardData);
         }
 
-        [RequireConnection]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })] // Apenas administradores podem acessar esta action
         public ActionResult Index()
         {
             return View();
         }
 
-        [RequireConnection]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> AccountsList(string search, int page = 1)
         {
             var query = _accountRepository.Where(a =>
@@ -82,7 +82,7 @@ namespace LendGames.Web.MvcApp.Controllers
             return PartialView("_AccountsList", accounts.Select(a => MapAccountViewModel(a)));
         }
 
-        [RequireConnection]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> Edit(int id = 0)
         {
             var account = await _accountRepository.FindAsync(id);
@@ -90,14 +90,14 @@ namespace LendGames.Web.MvcApp.Controllers
         }
 
         [HttpPost]
-        [RequireConnection]
         [ValidateAntiForgeryToken]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> Edit(AccountViewModel accountViewModel)
         {
             // Se for uma edição, não deve validar a senha, pois existe
             // uma action e métodos específico para este tipo de alteração.
-            if (accountViewModel.Id != 0)            
-                ModelState.Remove("Password");            
+            if (accountViewModel.Id != 0)
+                ModelState.Remove("Password");
 
             if (ModelState.IsValid)
             {
@@ -119,7 +119,7 @@ namespace LendGames.Web.MvcApp.Controllers
             return View(accountViewModel);
         }
 
-        [RequireConnection]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> Disable(int id)
         {
             var account = await _accountRepository.FindAsync(id);
@@ -129,9 +129,9 @@ namespace LendGames.Web.MvcApp.Controllers
             return View(MapAccountViewModel(account));
         }
 
-        [RequireConnection]
         [ValidateAntiForgeryToken]
         [HttpPost, ActionName("Disable")]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> DisableConfirmed(int id)
         {
             var account = await _accountRepository.FindAsync(id);
@@ -153,7 +153,7 @@ namespace LendGames.Web.MvcApp.Controllers
             return View(MapAccountViewModel(account));
         }
 
-        [RequireConnection]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> Enable(int id)
         {
             var account = await _accountRepository.FindAsync(id);
@@ -163,9 +163,9 @@ namespace LendGames.Web.MvcApp.Controllers
             return View(MapAccountViewModel(account));
         }
 
-        [RequireConnection]
         [ValidateAntiForgeryToken]
         [HttpPost, ActionName("Enable")]
+        [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> EnableConfirmed(int id)
         {
             var account = await _accountRepository.FindAsync(id);
@@ -185,6 +185,41 @@ namespace LendGames.Web.MvcApp.Controllers
             }
 
             return View(MapAccountViewModel(account));
+        }
+
+        [RequireConnection]
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [RequireConnection]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _accountRepository.ChangePasswordAsync(
+                        ConnectedId,
+                        changePasswordViewModel.CurrentPassword,
+                        changePasswordViewModel.NewPassword,
+                        changePasswordViewModel.ConfirmPassword
+                    );
+
+                    await db.SaveChangesAsync();
+
+                    ViewBag.Success = "A sua senha foi alterada com sucesso.";
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
+                }
+            }
+
+            return View(changePasswordViewModel);
         }
 
         [HttpPost]
@@ -225,7 +260,7 @@ namespace LendGames.Web.MvcApp.Controllers
                 accountViewModel.Username = account.Username;
                 accountViewModel.Email = account.Email;
                 accountViewModel.Type = account.Type;
-                accountViewModel.Enabled = account.Enabled;                
+                accountViewModel.Enabled = account.Enabled;
             }
 
             return accountViewModel;
@@ -240,7 +275,7 @@ namespace LendGames.Web.MvcApp.Controllers
                 Username = accountViewModel.Username,
                 Enabled = accountViewModel.Enabled,
                 Password = accountViewModel.Password,
-                Type = accountViewModel.Type                
+                Type = accountViewModel.Type
             };
 
             return account;

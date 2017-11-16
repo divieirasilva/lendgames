@@ -158,6 +158,7 @@
     </Compile>
     <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
+    <Compile Include="ViewModels\ChangePasswordViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\FriendViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
@@ -239,6 +240,7 @@
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\Disable.cshtml" />
     <Content Include="Views\Account\Enable.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

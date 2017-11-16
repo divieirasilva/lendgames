@@ -108,5 +108,22 @@ namespace LendGames.Database.Repositories
             existingAccount.Enabled = true;
             Update(existingAccount);
         }
+
+        public async Task ChangePasswordAsync(int id, string currentPassword, string newPassword, string confirmPassword)
+        {
+            var account = await FindAsync(id);
+            if (account == null)
+                return;
+
+            currentPassword = currentPassword.Encrypt(Model.Key);
+            if (currentPassword != account.Password)
+                throw new Exception("A senha atual informada está incorreta.");
+
+            if (newPassword != confirmPassword)
+                throw new Exception("A nova senha e a confirmação de senha não são iguais.");
+
+            account.Password = newPassword.Encrypt(Model.Key);
+            Update(account);
+        }
     }
 }

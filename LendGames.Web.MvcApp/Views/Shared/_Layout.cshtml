@@ -33,11 +33,18 @@
             @Html.ValidationSummary(false, "Não foi possível prosseguir, verifique os erros e tente novamente.", new { @class = "alert alert-block alert-danger fade in" })
         }
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div id="response" class="hidden alert"></div>
+        @if (ViewBag.Success != null)
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="alert alert-block alert-success fade in">
+                        <strong>Sucesso!</strong>
+                        <br />
+                        @ViewBag.Success
+                    </div>
+                </div>
             </div>
-        </div>
+        }        
 
         @RenderBody()        
 
