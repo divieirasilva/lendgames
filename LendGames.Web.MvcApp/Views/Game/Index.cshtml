@@ -1,62 +1,31 @@
-﻿@model IEnumerable<LendGames.Database.Models.Game>
-
-@{
+﻿@{
     ViewBag.Title = "Jogos";
 }
 
 <div class="panel panel-default">
-    <table class="table table-hover table-striped">
-        <thead>
-            <tr>
-                <th>@Html.DisplayNameFor(model => model.Title)</th>
-                <th>@Html.DisplayNameFor(model => model.IsLended)</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.IsLended)
-                    </td>
-                    <td>
-                        <div>
-                            <div class="btn-group pull-right">
-                                <a class="btn btn-default btn-sm" href="/Game/Edit/@item.Id"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
-                                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">                                    
-                                    <li><a href="/Game/Remove/@item.Id"><i class="glyphicon glyphicon-trash"></i> Remover</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4">
-                    <div class="pull-right">
-                        <ul class="pagination">
-                            @Html.PageLinks(ViewBag.PagingData as PagingData, x => Url.Action("Index", "Game", new { page = x }))
-                        </ul>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6 pull-right">
+                <div class="input-group">
+                    <input id="Search" name="Search" type="text" autofocus autocomplete="off" class="form-control" placeholder="Busca de jogos" value="@ViewBag.Search">
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default" onclick="return loadGamesList(1)"><i class="glyphicon glyphicon-search"></i></button>
                     </div>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div id="GamesListHolder"></div>
 
 <div class="panel panel-default">
     <div class="panel-body">
         <a class="btn btn-default" href="/Game/Edit"><i class="glyphicon glyphicon-file"></i> Novo</a>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/Scripts/game/index.js"></script>
+}
 

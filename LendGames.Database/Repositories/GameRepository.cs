@@ -14,6 +14,7 @@ namespace LendGames.Database.Repositories
         {
             BeforeInsert += GameRepository_BeforeInsert;
             BeforeUpdate += GameRepository_BeforeUpdate;
+            BeforeDelete += GameRepository_BeforeDelete;
         }
 
         #region Validations
@@ -28,6 +29,14 @@ namespace LendGames.Database.Repositories
         {
             if (Where(g => g.Title == e.Model.Title).Any())
                 throw new Exception("Você já possui um jogo com este mesmo título.");
+        }
+
+        private void GameRepository_BeforeDelete(RepositoryEventArgs<Game> e)
+        {
+            var game = Find(e.Model.Id);
+
+            if (game?.IsLended == true)            
+                throw new Exception("Este jogo está emprestado e não pode ser removido.");
         }
 
         #endregion

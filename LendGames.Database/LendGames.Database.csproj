@@ -48,9 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LendGamesContext.cs" />
-    <Compile Include="Migrations\201711161245571_Initial.cs" />
-    <Compile Include="Migrations\201711161245571_Initial.Designer.cs">
-      <DependentUpon>201711161245571_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201711161641162_InitialMigration.cs" />
+    <Compile Include="Migrations\201711161641162_InitialMigration.Designer.cs">
+      <DependentUpon>201711161641162_InitialMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711161648043_AddedGameAndFriendEntities.cs" />
+    <Compile Include="Migrations\201711161648043_AddedGameAndFriendEntities.Designer.cs">
+      <DependentUpon>201711161648043_AddedGameAndFriendEntities.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
@@ -73,9 +77,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201711161245571_Initial.resx">
-      <DependentUpon>201711161245571_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711161641162_InitialMigration.resx">
+      <DependentUpon>201711161641162_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711161648043_AddedGameAndFriendEntities.resx">
+      <DependentUpon>201711161648043_AddedGameAndFriendEntities.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Queries.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

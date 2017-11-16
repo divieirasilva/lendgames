@@ -1,5 +1,6 @@
 ﻿using LendGames.Database;
 using LendGames.Database.Models;
+using LendGames.Utils.Paging;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
@@ -117,6 +118,30 @@ namespace LendGames.Web.MvcApp.Controllers
         protected void TransportViewData()
         {
             TempData["ViewData"] = ViewData;
+        }
+
+        /// <summary>
+        /// Este método monta o objeto que será usado para paginação.
+        /// </summary>
+        /// <param name="page">Página atualmente selecionada.</param>
+        /// <param name="totalItems">Total de itens que compõe a lista.</param>
+        /// <param name="skip">Total de registros podem ser descartados, pois já foram paginados.</param>
+        /// <returns>Dados referente a paginação</returns>
+        protected PagingData BuildPagingData(int page, int totalItems, out int skip)
+        {
+            // A página nunca deve ser menor que 1
+            page = Math.Max(1, page);
+            skip = (page - 1) * ItemsPerPage;
+
+            var pagingData = new PagingData
+            {                
+                CurrentPage = page,
+                ItemsPerPage = ItemsPerPage,
+                PagesPerGroup = 3,
+                TotalItems = totalItems
+            };
+
+            return pagingData;
         }
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)

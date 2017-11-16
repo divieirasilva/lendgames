@@ -1,0 +1,69 @@
+﻿@model IEnumerable<LendGames.Web.MvcApp.ViewModels.GameViewModel>
+@using LendGames.Utils.Paging
+
+<div class="panel panel-default">
+    @if (!Model.Any())
+    {
+        <div class="panel-body">
+            <h4 class="text-center" >Não há nenhum jogo cadastrado ainda :(</h4>
+        </div>
+    }
+    else
+    {
+
+
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Title)</th>
+                    <th>@Html.DisplayNameFor(model => model.IsLended)</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @BoolToStringComponent.Build(item.IsLended)
+                        </td>
+                        <td>
+                            <div>
+                                <div class="btn-group pull-right">
+                                    <a class="btn btn-default btn-sm" href="/Game/Edit/@item.Id"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+                                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/Game/Remove/@item.Id"><i class="glyphicon glyphicon-trash"></i> Remover</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <div class="pull-right">
+                            <ul class="pagination">
+                                @Html.PageLinks( //Montagem da paginação com chamada no método JavaScript
+                                     ViewBag.PagingData as PagingData,
+                                     p => Url.Action("GamesList", "Game", new { page = p }),
+                                     p => "return loadGamesList(" + p + ");"
+                                 )
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    }
+</div>

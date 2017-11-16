@@ -21,7 +21,7 @@ namespace LendGames.Database.Migrations
                 new Account
                 {
                     Username = "admin",                 
-                    Password = "P@ssw()rd".Encrypt(Model.Key),                    
+                    Password = "102030".Encrypt(Model.Key),                    
                     Email = "admin@lendgames.com",
                     Enabled = true,                    
                     Type = AccountType.Administrator

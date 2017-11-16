@@ -41,5 +41,10 @@ namespace LendGames.Web.MvcApp.Controllers
             }
         }
 
+        [RequireConnection] // Verifica se há uma conta conectada e se ela pode prosseguir com o request
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
     }
 }

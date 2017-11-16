@@ -1,11 +1,10 @@
-﻿using LendGames.Database.Repositories;
-using LendGames.Utils.Paging;
+﻿using LendGames.Database.Models;
+using LendGames.Database.Repositories;
+using LendGames.Web.MvcApp.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace LendGames.Web.MvcApp.Controllers
@@ -20,28 +19,121 @@ namespace LendGames.Web.MvcApp.Controllers
 
             _gameRepository = new GameRepository(db);
         }
-        
+
         [RequireConnection] // Verifica se há uma conta conectada e se ela pode prosseguir com o request
-        public async Task<ActionResult> Index(int page = 1)
+        public ActionResult Index()
         {
-            int skip = (page - 1) * ItemsPerPage;
-            var query = _gameRepository.Where();
+            return View();
+        }
 
-            ViewBag.PagingData = new PagingData
-            {
-                CurrentPage = page,
-                ItemsPerPage = ItemsPerPage,
-                PagesPerGroup = 3,
-                TotalItems = await query.CountAsync()
-            };
+        [RequireConnection] 
+        public async Task<ActionResult> GamesList(string search, int page = 1)
+        {            
+            var query = _gameRepository.Where(g => string.IsNullOrEmpty(search) | g.Title.Contains(search));
 
-            var materials = await query
+            ViewBag.PagingData = BuildPagingData(
+                page, 
+                await query.CountAsync(), 
+                out int skip
+            );
+
+            var games = await query
                 .OrderBy(o => o.Title)
                 .Skip(skip)
-                .Take(ItemsPerPage)
+                .Take(ItemsPerPage)                
                 .ToListAsync();
 
-            return View(materials);
+            ViewBag.Search = search;
+            return PartialView("_GamesList", games.Select(g => MapGameViewModel(g)));
+        }        
+
+        [RequireConnection]
+        public async Task<ActionResult> Edit(int id = 0)
+        {
+            var game = await _gameRepository.FindAsync(id);
+            return View(MapGameViewModel(game));
+        }
+
+        [HttpPost]
+        [RequireConnection]
+        public async Task<ActionResult> Edit(GameViewModel gameViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var game = MapGame(gameViewModel);
+
+                    await _gameRepository.CreateOrEditAsync(game);
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
+                }             
+            }
+
+            return View(gameViewModel);
+        }
+
+        [RequireConnection]
+        public async Task<ActionResult> Remove(int id)
+        {
+            var game = await _gameRepository.FindAsync(id);
+            if (game == null)
+                return HttpNotFound();
+
+            return View(MapGameViewModel(game));
+        }
+
+        [RequireConnection]
+        [HttpPost, ActionName("Remove")]    
+        public async Task<ActionResult> RemoveConfirmed(int id)
+        {
+            var game = await _gameRepository.FindAsync(id);
+            if (game == null)
+                return HttpNotFound();
+
+            try
+            {
+                _gameRepository.Delete(id);
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));                
+            }
+
+            return View(MapGameViewModel(game));
+        }
+
+        private GameViewModel MapGameViewModel(Game game)
+        {
+            var gameViewModel = new GameViewModel();
+
+            if (game != null)
+            {
+                gameViewModel.Id = game.Id;
+                gameViewModel.Title = game.Title;
+                gameViewModel.IsLended = game.IsLended;
+            }
+
+            return gameViewModel;
+        }
+
+        private Game MapGame(GameViewModel gameViewModel)
+        {
+            var game = new Game
+            {
+                Id = gameViewModel.Id,
+                Title = gameViewModel.Title
+            };
+
+            return game;
         }
     }
 }

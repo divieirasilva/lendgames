@@ -1,0 +1,119 @@
+﻿@helper Build(string prefix, string display, string apiUrl, string searchValue, int selectedId, List<KeyValuePair<string, string>> binds, string suggestionItemDisplay = "")
+{
+
+/*
+* ******************************************************
+* 
+* Este componente cria um input que ao ser configurado
+* gera um campo de busca, com ele é possível efetuar 
+* "binds" entre os campos que são retornados com os 
+* inputs na View.
+* 
+* ******************************************************
+*/
+
+var searchInputName = $"{prefix}Search";
+var idInputName = $"{prefix}Id";
+var loaderName = $"{prefix}Loader";
+var groupName = $"{prefix}Group";
+var suggestionDivName = $"{prefix}Suggestion";
+var suggestionTableBodyName = $"{prefix}SuggestionTBody";
+var functionName = $"{prefix}_find";
+var selectSuggestionFunctionName = $"{prefix}_selected";
+
+    <div id="@groupName" class="form-group">
+
+        <label class="control-label" for="@searchInputName">@display <i id="@loaderName" class="hidden fa fa-spin fa-spinner fa-pulse"></i></label>
+        <input id="@idInputName" name="@idInputName" type="hidden" value="@selectedId" />
+
+        <div class="input-group">
+            <input id="@searchInputName" type="text" name="@searchInputName" class="form-control" autocomplete="off" value="@searchValue" onblur="@(functionName)($('#@searchInputName').val())" autofocus />
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" tabindex="-1" onclick="@(functionName)($('#@searchInputName').val())">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </span>
+        </div>
+
+        <span class="field-validation-valid text-danger"
+              data-valmsg-for="@idInputName"
+              data-valmsg-replace="true">
+        </span>
+        <div id="@suggestionDivName" style="z-index: 999; position: absolute; width: 100%;" class="hidden">
+            <div class="panel panel-default">
+                <table class="table table-hover">
+                    <tbody id="@suggestionTableBodyName"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        var loaded@(prefix) = {};
+
+        function @(selectSuggestionFunctionName)(item) {
+            @foreach(var bind in binds)
+            {
+                @:$('#@bind.Key').val(item['@bind.Value']);
+                @:$('#@bind.Key').text(item['@bind.Value']);
+            }
+
+            loaded@(prefix) = item;
+            $('#@suggestionDivName').addClass('hidden');
+        }
+
+        function @(functionName)(query) {
+            $.ajax({
+                url: '@apiUrl',
+                data: { query },
+                async: true,
+                beforeSend: function () {
+                    $('#@loaderName').removeClass('hidden');
+                    $('#@suggestionDivName').addClass('hidden');
+                    $('#@suggestionTableBodyName').html('');
+                },
+                complete: function () {
+                    $('#@loaderName').addClass('hidden');
+                }
+            }).success(function (data) {
+
+                if (!data) {
+                    $('#@groupName').removeClass('has-success');
+                    $('#@groupName').addClass('has-error');
+                    return false;
+                }
+
+                if (data.length && data.length > 1) {
+                    data.forEach(function (item) {
+                        var tr = $('<tr></tr>');
+                        var td = $('<td></td>');
+                        var content = item['@suggestionItemDisplay'];
+                        if (content) {
+                            td.text(content);
+                            tr.append(td);
+                            td.on('click', function(){
+                                @(selectSuggestionFunctionName)(item);
+                            });
+                            $('#@suggestionTableBodyName').append(tr);
+                        }
+
+                    });
+
+                    $('#@suggestionDivName').removeClass('hidden');
+                } else {
+                    data = data.length ? data[0] : data;
+                    @(selectSuggestionFunctionName)(data);
+                }
+
+                $('#@groupName').removeClass('has-error');
+                $('#@groupName').addClass('has-success');
+
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                $('#@groupName').removeClass('has-success');
+                $('#@groupName').addClass('has-error');
+                console.error(errorThrown);
+            });
+        }
+    </script>
+}

@@ -17,6 +17,8 @@ namespace LendGames.Database
         protected override void OnModelCreating(DbModelBuilder builder)
         {
             BuildAccountMapping(builder);
+            BuildGameMapping(builder);
+            BuildFriendMapping(builder);
         }
 
         private void BuildAccountMapping(DbModelBuilder builder)
@@ -30,9 +32,15 @@ namespace LendGames.Database
             builder.Entity<Account>().Property(a => a.Enabled);
         }
 
-        private void BuildGameMapping (DbModelBuilder builder)
+        private void BuildGameMapping(DbModelBuilder builder)
         {
             builder.Entity<Game>().Property(g => g.Title).HasMaxLength(1024).IsRequired();
+        }
+
+        private void BuildFriendMapping(DbModelBuilder builder)
+        {
+            builder.Entity<Friend>().Property(f => f.Email).HasMaxLength(1024).IsRequired();
+            builder.Entity<Friend>().Property(f => f.Name).HasMaxLength(256).IsRequired();
         }
     }
 }
