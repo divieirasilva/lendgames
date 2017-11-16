@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Amigos";
+}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-6 pull-right">
+                <div class="input-group">
+                    <input id="Search" name="Search" type="text" autofocus autocomplete="off" class="form-control" placeholder="Busca de amigos" value="@ViewBag.Search">
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default" onclick="return loadFriendsList(1)"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="FriendsListHolder"></div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <a class="btn btn-default" href="/Friend/Edit"><i class="glyphicon glyphicon-file"></i> Novo</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/friend/index.js"></script>
+}

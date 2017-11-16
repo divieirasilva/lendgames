@@ -11,6 +11,7 @@ function loadGamesList(page) {
         },
         async: true,        
         beforeSend: function () {
+            $('#GamesListHolder').html('');
             $('#GamesListHolder').addClass('loading-box');
         },
         complete: function () {

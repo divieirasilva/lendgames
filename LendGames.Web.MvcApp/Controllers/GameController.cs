@@ -38,7 +38,7 @@ namespace LendGames.Web.MvcApp.Controllers
             );
 
             var games = await query
-                .OrderBy(o => o.Title)
+                .OrderBy(g => g.Title)
                 .Skip(skip)
                 .Take(ItemsPerPage)                
                 .ToListAsync();

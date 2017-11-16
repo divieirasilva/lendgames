@@ -4,7 +4,6 @@
     ViewBag.Title = "Gerenciar Jogo";
 }
 
-<h2>Edit</h2>
 <form id="GameForm" action="/Game/Edit" method="post">
 
     @Html.AntiForgeryToken()
@@ -12,11 +11,13 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <div class="row form-group">
+            <div class="row">
                 <div class="col-lg-2">
-                    @Html.LabelFor(model => model.Title, new { @class = "control-label" })
-                    @Html.TextBoxFor(model => model.Title, new { @class = "form-control", autofocus = true })
-                    @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Title, new { @class = "form-control", autofocus = true })
+                        @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
         </div>
