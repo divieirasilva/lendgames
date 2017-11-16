@@ -10,6 +10,8 @@ namespace LendGames.Database
 {
     public class LendGamesContext : DbContext
     {
+        public DbSet<Game> Games { get; set; }
+        public DbSet<Friend> Friends { get; set; }
         public DbSet<Account> Accounts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder builder)
@@ -19,13 +21,18 @@ namespace LendGames.Database
 
         private void BuildAccountMapping(DbModelBuilder builder)
         {
-            builder.Entity<Account>().Property(a => a.Username).HasMaxLength(128).IsRequired().HasColumnName("Usuário");
-            builder.Entity<Account>().Property(a => a.Password).HasMaxLength(512).IsRequired().HasColumnName("Senha");
-            builder.Entity<Account>().Property(a => a.Email).HasMaxLength(1024).IsRequired().HasColumnName("E-mail");
-            builder.Entity<Account>().Property(a => a.CurrentConnection).HasColumnName("Conexão Atual");
-            builder.Entity<Account>().Property(a => a.LastConnection).HasColumnName("Última Conexão");
-            builder.Entity<Account>().Property(a => a.Type).HasColumnName("Tipo");
-            builder.Entity<Account>().Property(a => a.Enabled).HasColumnName("Ativo");
+            builder.Entity<Account>().Property(a => a.Username).HasMaxLength(128).IsRequired();
+            builder.Entity<Account>().Property(a => a.Password).HasMaxLength(512).IsRequired();
+            builder.Entity<Account>().Property(a => a.Email).HasMaxLength(1024).IsRequired();
+            builder.Entity<Account>().Property(a => a.CurrentConnection);
+            builder.Entity<Account>().Property(a => a.LastConnection);
+            builder.Entity<Account>().Property(a => a.Type);
+            builder.Entity<Account>().Property(a => a.Enabled);
+        }
+
+        private void BuildGameMapping (DbModelBuilder builder)
+        {
+            builder.Entity<Game>().Property(g => g.Title).HasMaxLength(1024).IsRequired();
         }
     }
 }

@@ -3,9 +3,8 @@
     "",
     "\\LendGames.Database",
     "\\LendGames.Web.MvcApp",
-    "\\packages\\Antlr.3.4.1.9004",
-    "\\packages\\Antlr.3.4.1.9004\\lib"
+    "\\LendGames.Web.MvcApp\\App_Data"
   ],
-  "SelectedNode": "\\LendGames.Web.MvcApp\\Web.config",
+  "SelectedNode": "\\LendGames.Web.MvcApp\\App_Data",
   "PreviewInSolutionExplorer": false
 }

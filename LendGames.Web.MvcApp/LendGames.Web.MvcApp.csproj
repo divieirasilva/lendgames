@@ -150,11 +150,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Controller.cs" />
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HtmlHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequiredConnectionAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -193,6 +196,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\PermissionRequired.cshtml" />
+    <Content Include="Views\Game\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -216,6 +221,10 @@
     <ProjectReference Include="..\LendGames.Database\LendGames.Database.csproj">
       <Project>{31A36998-E878-44D2-9AC8-1C72F2AC1E80}</Project>
       <Name>LendGames.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LendGames.Utils\LendGames.Utils.csproj">
+      <Project>{5D75DA23-1923-4B69-B045-021132B5B360}</Project>
+      <Name>LendGames.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
