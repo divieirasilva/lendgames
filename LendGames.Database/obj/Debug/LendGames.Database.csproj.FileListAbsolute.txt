@@ -1,0 +1,14 @@
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\LendGames.Database.dll
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\LendGames.Database.pdb
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\EntityFramework.dll
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\EntityFramework.SqlServer.dll
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\EntityFramework.xml
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\EntityFramework.SqlServer.xml
+C:\Projects\Net\LendGames\LendGames.Database\obj\Debug\LendGames.Database.csprojResolveAssemblyReference.cache
+C:\Projects\Net\LendGames\LendGames.Database\obj\Debug\LendGames.Database.csproj.CoreCompileInputs.cache
+C:\Projects\Net\LendGames\LendGames.Database\obj\Debug\LendGames.Database.dll
+C:\Projects\Net\LendGames\LendGames.Database\obj\Debug\LendGames.Database.pdb
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\LendGames.Utils.dll
+C:\Projects\Net\LendGames\LendGames.Database\bin\Debug\LendGames.Utils.pdb
+C:\Projects\Net\LendGames\LendGames.Database\obj\Debug\LendGames.Database.Migrations.Initial.resources
+C:\Projects\Net\LendGames\LendGames.Database\obj\Debug\LendGames.Database.csproj.GenerateResource.Cache

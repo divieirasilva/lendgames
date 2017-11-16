@@ -1,0 +1,84 @@
+﻿@helper Build()
+{
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Lend Games</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav"></ul>
+            </div>
+        </div>
+    </div>
+}
+
+@helper Build(System.Web.Mvc.WebViewPage sender, string url)
+{
+var connectedId = Session["ConnectedId"] as int?;
+var db = new LendGames.Database.LendGamesContext();
+
+var accountRepository = new LendGames.Database.Repositories.AccountRepository(db);
+var connectedAccount = accountRepository.Find(connectedId);
+
+if (connectedAccount == null)
+{
+        @Build();
+}
+else
+{
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/Account/Dashboard">Lend Games</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <a href="/Account/Dashboard">Início</a>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Games <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/">Link 1</a></li>
+                                <li><a href="/">Link 2</a></li>
+                            </ul>
+                        </li>                        
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right" style="margin-right: 10px;">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sistema <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                @if (connectedAccount.Type == LendGames.Database.Models.AccountType.Administrator)
+                                {                                    
+                                    <li class="divider" />
+                                    <li><a href="/Account/Index">Usuários</a></li>                                    
+                                    <li class="divider" />
+                                    <li class="dropdown-header">Outros Cadastros</li>
+                                    <li><a href="/Category">Jogos</a></li>
+
+                                    <li class="divider" />
+                                }
+                                <li><a href="/Account/ChangePassword"> Alterar Senha</a></li>
+                                <li><a href="/Account/Disconnect">Desconectar</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+}
+
+}
