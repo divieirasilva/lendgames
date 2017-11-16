@@ -1,0 +1,71 @@
+﻿@model IEnumerable<LendGames.Web.MvcApp.ViewModels.AccountViewModel>
+@using LendGames.Utils.Paging
+
+<div class="panel panel-default">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Username)</th>
+                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                <th class="text-center">@Html.DisplayNameFor(model => model.Enabled)</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Username)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td class="text-center">
+                        @BoolToStringComponent.Build(item.Enabled)
+                    </td>
+                    <td>
+                        <div>
+                            <div class="btn-group pull-right">
+                                <a class="btn btn-default btn-sm" href="/Account/Edit/@item.Id"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+                                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    @if (item.Enabled)
+                                    {
+                                        <li><a href="/Account/Disable/@item.Id"><i class="glyphicon glyphicon-trash"></i> Desativar</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="/Account/Enable/@item.Id"><i class="glyphicon glyphicon-trash"></i> Ativar</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    <div class="pull-right">
+                        <ul class="pagination">
+                            @Html.PageLinks( //Montagem da paginação com chamada no método JavaScript
+                                ViewBag.PagingData as PagingData,
+                                p => Url.Action("AccountsList", "Friend", new { page = p }),
+                                p => "return loadAccountsList(" + p + ");"
+                            )
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+
+</div>
+

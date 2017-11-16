@@ -16,26 +16,26 @@ namespace LendGames.Database.Repositories
         {
             _gameRepository = new GameRepository(context);
 
-            BeforeInsert += GameRepository_BeforeInsert;
-            BeforeUpdate += GameRepository_BeforeUpdate;
-            BeforeDelete += GameRepository_BeforeDelete;
+            BeforeInsert += FriendRepository_BeforeInsert;
+            BeforeUpdate += FriendRepository_BeforeUpdate;
+            BeforeDelete += FriendRepository_BeforeDelete;
         }
 
         #region Validations
 
-        private void GameRepository_BeforeUpdate(RepositoryEventArgs<Friend> e)
+        private void FriendRepository_BeforeUpdate(RepositoryEventArgs<Friend> e)
         {
             if (Where(g => g.Email == e.Model.Email & g.Id != e.Model.Id).Any())
                 throw new Exception("Você já possui um amigo com este mesmo e-mail.");
         }
 
-        private void GameRepository_BeforeInsert(RepositoryEventArgs<Friend> e)
+        private void FriendRepository_BeforeInsert(RepositoryEventArgs<Friend> e)
         {
             if (Where(g => g.Email == e.Model.Email).Any())
                 throw new Exception("Você já possui um amigo com este mesmo e-mail.");
         }
 
-        private void GameRepository_BeforeDelete(RepositoryEventArgs<Friend> e)
+        private void FriendRepository_BeforeDelete(RepositoryEventArgs<Friend> e)
         {
             var hasGames = _gameRepository.Where(g => g.FriendId == e.Model.Id).Any();
 

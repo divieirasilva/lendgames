@@ -1,4 +1,5 @@
-﻿using LendGames.Database.Repositories;
+﻿using LendGames.Database.Models;
+using LendGames.Database.Repositories;
 using LendGames.Web.MvcApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,167 @@ namespace LendGames.Web.MvcApp.Controllers
             _accountRepository = new AccountRepository(db);
             _gameRepository = new GameRepository(db);
             _friendRepository = new FriendRepository(db);
+        }
+
+        [RequireConnection] // Verifica se há uma conta conectada e se ela pode prosseguir com o request
+        public ActionResult Dashboard()
+        {
+            return View();
+        }
+
+        [RequireConnection]
+        public async Task<ActionResult> DashboardInfo()
+        {
+            var games = await _gameRepository.Where().ToListAsync();
+            var friends = await _friendRepository.Where().ToListAsync();
+            var lendedGames = games.Where(g => g.IsLended).ToList();
+            var connectedAccount = await _accountRepository.FindAsync(ConnectedId);
+
+            var dashboardData = new DashboardViewModel
+            {
+                TotalFriends = friends.Count,
+                TotalGames = games.Count,
+                TotalLendedGames = lendedGames.Count,
+                AccountName = connectedAccount.Username
+            };
+
+            return PartialView("_DashboardInfo", dashboardData);
+        }
+
+        [RequireConnection]
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [RequireConnection]
+        public async Task<ActionResult> AccountsList(string search, int page = 1)
+        {
+            var query = _accountRepository.Where(a =>
+                string.IsNullOrEmpty(search)
+                | a.Username.Contains(search)
+                | a.Email.Contains(search)
+            );
+
+            ViewBag.PagingData = BuildPagingData(
+                page,
+                await query.CountAsync(),
+                out int skip
+            );
+
+            var accounts = await query
+                .OrderBy(a => a.Username)
+                .Skip(skip)
+                .Take(ItemsPerPage)
+                .ToListAsync();
+
+            ViewBag.Search = search;
+            return PartialView("_AccountsList", accounts.Select(a => MapAccountViewModel(a)));
+        }
+
+        [RequireConnection]
+        public async Task<ActionResult> Edit(int id = 0)
+        {
+            var account = await _accountRepository.FindAsync(id);
+            return View(MapAccountViewModel(account));
+        }
+
+        [HttpPost]
+        [RequireConnection]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(AccountViewModel accountViewModel)
+        {
+            // Se for uma edição, não deve validar a senha, pois existe
+            // uma action e métodos específico para este tipo de alteração.
+            if (accountViewModel.Id != 0)            
+                ModelState.Remove("Password");            
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var account = MapAccount(accountViewModel);
+
+                    await _accountRepository.CreateOrEditAsync(account);
+                    await db.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
+                }
+            }
+
+            return View(accountViewModel);
+        }
+
+        [RequireConnection]
+        public async Task<ActionResult> Disable(int id)
+        {
+            var account = await _accountRepository.FindAsync(id);
+            if (account == null)
+                return HttpNotFound();
+
+            return View(MapAccountViewModel(account));
+        }
+
+        [RequireConnection]
+        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Disable")]
+        public async Task<ActionResult> DisableConfirmed(int id)
+        {
+            var account = await _accountRepository.FindAsync(id);
+            if (account == null)
+                return HttpNotFound();
+
+            try
+            {
+                await _accountRepository.DisableAsync(id);
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
+            }
+
+            return View(MapAccountViewModel(account));
+        }
+
+        [RequireConnection]
+        public async Task<ActionResult> Enable(int id)
+        {
+            var account = await _accountRepository.FindAsync(id);
+            if (account == null)
+                return HttpNotFound();
+
+            return View(MapAccountViewModel(account));
+        }
+
+        [RequireConnection]
+        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Enable")]
+        public async Task<ActionResult> EnableConfirmed(int id)
+        {
+            var account = await _accountRepository.FindAsync(id);
+            if (account == null)
+                return HttpNotFound();
+
+            try
+            {
+                await _accountRepository.EnableAsync(id);
+                await db.SaveChangesAsync();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
+            }
+
+            return View(MapAccountViewModel(account));
         }
 
         [HttpPost]
@@ -53,29 +215,35 @@ namespace LendGames.Web.MvcApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [RequireConnection] // Verifica se há uma conta conectada e se ela pode prosseguir com o request
-        public ActionResult Dashboard()
+        private AccountViewModel MapAccountViewModel(Account account)
         {
-            return View();
+            var accountViewModel = new AccountViewModel();
+
+            if (account != null)
+            {
+                accountViewModel.Id = account.Id;
+                accountViewModel.Username = account.Username;
+                accountViewModel.Email = account.Email;
+                accountViewModel.Type = account.Type;
+                accountViewModel.Enabled = account.Enabled;                
+            }
+
+            return accountViewModel;
         }
 
-        [RequireConnection]
-        public async Task<ActionResult> DashboardInfo()
+        private Account MapAccount(AccountViewModel accountViewModel)
         {
-            var games = await _gameRepository.Where().ToListAsync();
-            var friends = await _friendRepository.Where().ToListAsync();
-            var lendedGames = games.Where(g => g.IsLended).ToList();
-            var connectedAccount = await _accountRepository.FindAsync(ConnectedId);
-
-            var dashboardData = new DashboardViewModel
+            var account = new Account
             {
-                TotalFriends = friends.Count,
-                TotalGames = games.Count,
-                TotalLendedGames = lendedGames.Count,
-                AccountName = connectedAccount.Username
+                Id = accountViewModel.Id,
+                Email = accountViewModel.Email,
+                Username = accountViewModel.Username,
+                Enabled = accountViewModel.Enabled,
+                Password = accountViewModel.Password,
+                Type = accountViewModel.Type                
             };
 
-            return PartialView("_DashboardInfo", dashboardData);
+            return account;
         }
     }
 }

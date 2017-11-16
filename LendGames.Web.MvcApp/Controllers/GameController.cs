@@ -56,6 +56,7 @@ namespace LendGames.Web.MvcApp.Controllers
 
         [HttpPost]
         [RequireConnection]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(GameViewModel gameViewModel)
         {
             if (ModelState.IsValid)
@@ -89,6 +90,7 @@ namespace LendGames.Web.MvcApp.Controllers
         }
 
         [RequireConnection]
+        [ValidateAntiForgeryToken]
         [HttpPost, ActionName("Remove")]    
         public async Task<ActionResult> RemoveConfirmed(int id)
         {

@@ -1,0 +1,46 @@
+﻿@model LendGames.Web.MvcApp.ViewModels.AccountViewModel
+
+@{
+    ViewBag.Title = "Ativar Conta";
+}
+<div class="alert alert-warning">
+    <strong>Atenção!</strong>
+    <br />
+    Você realmente deseja ativar a conta <strong>@Model.Username</strong>
+</div>
+
+<br />
+<div class="panel panel-default">
+    <div class="panel-body">
+        <strong>
+            @Html.DisplayNameFor(model => model.Username):
+        </strong>
+        @Html.DisplayFor(model => model.Username)
+        <br />
+        <strong>
+            @Html.DisplayNameFor(model => model.Email):
+        </strong>
+        @Html.DisplayFor(model => model.Email)
+        <br />
+        <strong>
+            @Html.DisplayNameFor(model => model.Type):
+        </strong>
+        @Html.DisplayFor(model => model.Type)
+    </div>
+</div>
+
+<form id="AccountForm" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button id="EnableButton" type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> <span>Ativar</span> <i class="fa fa-refresh fa-spin fa-fw hidden"></i></button>
+            <a href="/Account" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/Scripts/account/enable.js"></script>
+}
+

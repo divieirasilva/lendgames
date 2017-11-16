@@ -20,10 +20,10 @@
                     </div>
                 </div>
 
-                <div class="col-lg-2">
+                <div class="col-lg-3">
                     <div class="form-group">
                         @Html.LabelFor(model => model.Email, new { @class = "control-label" })
-                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control", autofocus = true })
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.Email, null, new { @class = "text-danger" })
                     </div>
                 </div>

@@ -157,6 +157,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelperExtensions.cs" />
+    <Compile Include="ViewModels\AccountViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\FriendViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
@@ -174,6 +175,10 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\account\disable.js" />
+    <Content Include="Scripts\account\edit.js" />
+    <Content Include="Scripts\account\enable.js" />
+    <Content Include="Scripts\account\index.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -229,6 +234,11 @@
     <Content Include="Views\Friend\Edit.cshtml" />
     <Content Include="Views\Friend\Remove.cshtml" />
     <Content Include="Views\Account\_DashboardInfo.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\_AccountsList.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
+    <Content Include="Views\Account\Disable.cshtml" />
+    <Content Include="Views\Account\Enable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

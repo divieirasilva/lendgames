@@ -26,3 +26,7 @@
     background-position: center;
     border-radius: 15%;
 }
+
+.table td {
+    vertical-align: middle !important;
+}

@@ -1,0 +1,63 @@
+﻿@model LendGames.Web.MvcApp.ViewModels.AccountViewModel
+
+@{
+    ViewBag.Title = "Gerenciar Conta";
+}
+
+<form id="AccountForm" action="/Account/Edit" method="post">
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Username, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Username, new { @class = "form-control", autofocus = true })
+                        @Html.ValidationMessageFor(model => model.Username, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @if (Model.Id == 0)
+                {
+                    <div class="col-lg-2">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Password, null, new { @class = "text-danger" })
+                        </div>
+                    </div>
+                }
+
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Email, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Type, new { @class = "control-label" })
+                        @Html.EnumDropDownListFor(model => model.Type, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Type, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button id="SaveButton" type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> <span>Salvar</span> <i class="fa fa-refresh fa-spin fa-fw hidden"></i></button>
+            <a href="/Account" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/Scripts/account/edit.js"></script>
+}
