@@ -1,0 +1,41 @@
+﻿@model LendGames.Web.MvcApp.ViewModels.DashboardViewModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Olá, @Model.AccountName</h4>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            @if (Model.TotalGames == 1)
+            {
+                <div class="col-lg-4">Você possui <strong>@Model.TotalGames</strong> jogo.</div>
+            }
+            else
+            {
+                <div class="col-lg-4">Você possui <strong>@Model.TotalGames</strong> jogos.</div>
+            }
+
+            @if (Model.TotalLendedGames == 1)
+            {
+                <div class="col-lg-4"><strong>@Model.TotalLendedGames</strong> jogo está emprestado.</div>
+            }
+            else
+            {
+                <div class="col-lg-4"><strong>@Model.TotalLendedGames</strong> jogos estão emprestados.</div>
+            }
+
+            @if (Model.TotalFriends == 1)
+            {
+                <div class="col-lg-4">Você possui <strong>@Model.TotalFriends</strong> amigo.</div>
+            }
+            else
+            {
+                <div class="col-lg-4">Você possui <strong>@Model.TotalFriends</strong> amigos.</div>
+            }
+        </div>
+    </div>
+    <div class="panel-footer">
+        <a href="/Game/Edit" class="btn btn-default">Novo Jogo</a>
+        <a href="/Friend/Edit" class="btn btn-default">Novo Amigo</a>
+    </div>
+</div>
