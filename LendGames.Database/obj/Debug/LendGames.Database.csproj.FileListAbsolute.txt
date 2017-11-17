@@ -29,3 +29,4 @@ C:\Users\divie\Documents\Development\net\lendgames\LendGames.Database\obj\Debug\
 C:\Users\divie\Documents\Development\net\lendgames\LendGames.Database\obj\Debug\LendGames.Database.dll
 C:\Users\divie\Documents\Development\net\lendgames\LendGames.Database\obj\Debug\LendGames.Database.pdb
 C:\Users\divie\Documents\Development\net\lendgames\LendGames.Database\obj\Debug\LendGames.Database.Migrations.AddedGameCoverFields.resources
+C:\Projects\Net\LendGames\LendGames.Database\obj\Debug\LendGames.Database.Migrations.AddedGameCoverFields.resources

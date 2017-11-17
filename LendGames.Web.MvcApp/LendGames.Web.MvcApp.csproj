@@ -200,7 +200,9 @@
     <Content Include="Scripts\friend\index.js" />
     <Content Include="Scripts\friend\remove.js" />
     <Content Include="Scripts\game\edit.js" />
+    <Content Include="Scripts\game\give-back.js" />
     <Content Include="Scripts\game\index.js" />
+    <Content Include="Scripts\game\lend.js" />
     <Content Include="Scripts\game\remove.js" />
     <Content Include="Scripts\home\dashboard.js" />
     <Content Include="Scripts\home\index.js" />
@@ -243,6 +245,8 @@
     <Content Include="Views\Account\Enable.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Game\_GamesList.cshtml" />
+    <Content Include="Views\Game\Lend.cshtml" />
+    <Content Include="Views\Game\GiveBack.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

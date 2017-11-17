@@ -35,7 +35,7 @@ namespace LendGames.Database.Repositories
         {
             var game = Find(e.Model.Id);
 
-            if (game?.IsLended == true)            
+            if (game?.IsLended == true)
                 throw new Exception("Este jogo está emprestado e não pode ser removido.");
         }
 
@@ -56,6 +56,39 @@ namespace LendGames.Database.Repositories
                 Update(existingGame);
             }
 
-        }        
+        }
+
+        public async Task Lend(int id, int friendId)
+        {
+            var game = await FindAsync(id);
+            var friendRepository = new FriendRepository(context);
+
+            var friend = await friendRepository.FindAsync(friendId);
+
+            if (game == null)
+                return;
+
+            if (game.IsLended)
+                throw new Exception("Este jogo já está emprestado.");
+
+            if (friend == null)
+                throw new Exception("Você deve selecionar um amigo para emprestar o jogo.");
+
+            game.FriendId = friendId;
+            game.LastLendDate = DateTime.Now;
+
+            Update(game);
+        }
+
+        public async Task GiveBack(int id)
+        {
+            var game = await FindAsync(id);
+
+            if (game == null)
+                return;
+
+            game.FriendId = null;
+            Update(game);
+        }
     }
 }

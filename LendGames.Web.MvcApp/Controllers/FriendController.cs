@@ -120,5 +120,29 @@ namespace LendGames.Web.MvcApp.Controllers
 
             return View(ModelMapper.MapFriendViewModel(friend));
         }
+
+        [RequireConnection]
+        public async Task<ActionResult> FindMany(string query)
+        {
+            if (string.IsNullOrEmpty(query))
+                return Json("", JsonRequestBehavior.AllowGet);
+
+            var friends = await _friendRepository
+                .Where(f =>
+                    f.Email.Contains(query)
+                    | f.Name.Contains(query)
+                    | f.Id.ToString() == query
+                ).Select(f => new
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Email = f.Email
+                }).ToListAsync();
+
+            if (friends.Count < 1)
+                return Json("", JsonRequestBehavior.AllowGet);
+
+            return Json(friends, JsonRequestBehavior.AllowGet);
+        }
     }
 }

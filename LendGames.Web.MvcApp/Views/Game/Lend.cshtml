@@ -1,0 +1,50 @@
+﻿@model LendGames.Web.MvcApp.ViewModels.GameViewModel
+
+@{
+    ViewBag.Title = "Emprestar Jogo";
+}
+
+<div class="alert alert-warning">
+    <strong>Atenção!</strong>
+    <br />
+    <p>Você está emprestando o jogo <strong>@Model.Title</strong></p>
+    <p>Selecione para qual amigo você irá emprestar e confirme.</p>
+</div>
+
+<form id="LendForm" method="post">
+    @Html.AntiForgeryToken()
+    
+    <input type="hidden" id="FriendId" name="FriendId" />
+    <div class="row">
+        <div class="col-lg-3">
+            @SearchComponent.Build(
+            "Friend",
+            "Emprestar Para",
+            "/Friend/FindMany",
+            "",
+            0,
+            new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("FriendId", "Id"),
+                new KeyValuePair<string, string>("FriendSearch", "Name")
+            },
+            "Name"
+        )
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button id="LendButton" type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-ok"></i> <span>Emprestar</span> <i class="fa fa-refresh fa-spin fa-fw hidden"></i></button>
+            <a href="/Game" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/Scripts/game/lend.js"></script>
+}
+
+
+
+

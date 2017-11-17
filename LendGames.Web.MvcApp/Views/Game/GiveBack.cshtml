@@ -1,0 +1,36 @@
+﻿@model LendGames.Web.MvcApp.ViewModels.GameViewModel
+
+@{
+    ViewBag.Title = "Devolver Jogo";
+}
+<div class="alert alert-warning">
+    <strong>Atenção!</strong>
+    <br />
+    Você realmente deseja devolver o jogo <strong>@Model.Title</strong>
+</div>
+
+<br />
+<div class="panel panel-default">
+    <div class="panel-body">
+        <strong>
+            @Html.DisplayNameFor(model => model.Title):
+        </strong>
+        @Html.DisplayFor(model => model.Title)        
+    </div>
+</div>
+
+<form id="GiveBackForm" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <button id="GiveBackButton" type="submit" class="btn btn-success"><i class="glyphicon glyphicon-ok"></i> <span>Devolver</span> <i class="fa fa-refresh fa-spin fa-fw hidden"></i></button>
+            <a href="/Game" class="btn btn-default"><i class="glyphicon glyphicon-arrow-left"></i> Voltar</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="~/Scripts/game/give-back.js"></script>
+}
+

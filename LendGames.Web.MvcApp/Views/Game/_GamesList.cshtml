@@ -33,11 +33,11 @@ else
                             <a href="/Game/Edit/@game.Id" class="btn btn-sm btn-default" role="button">Editar</a> 
                             @if (!game.IsLended)
                             {
-                                <a href="/Game/Remove/@game.Id" class="btn btn-sm btn-warning" role="button">Emprestar</a>
+                                <a href="/Game/Lend/@game.Id" class="btn btn-sm btn-warning" role="button">Emprestar</a>
                             }
                             else
                             {
-                                <a href="/Game/Remove/@game.Id" class="btn btn-sm btn-success" role="button">Devolver</a>
+                                <a href="/Game/GiveBack/@game.Id" class="btn btn-sm btn-success" role="button">Devolver</a>
                             }
                             <a href="/Game/Remove/@game.Id" class="btn btn-sm btn-danger" role="button">Remover</a>
                         </p>

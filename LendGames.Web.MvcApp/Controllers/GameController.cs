@@ -83,6 +83,79 @@ namespace LendGames.Web.MvcApp.Controllers
         }
 
         [RequireConnection]
+        public async Task<ActionResult> Lend(int id)
+        {
+            var game = await _gameRepository.FindAsync(id);
+            if (game == null)
+                return HttpNotFound();
+
+            return View(ModelMapper.MapGameViewModel(game));
+        }
+
+        [HttpPost]
+        [RequireConnection]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Lend(int id, int? friendId)
+        {
+            var game = await _gameRepository.FindAsync(id);
+            if (game == null)
+                return HttpNotFound();
+           
+            try
+            { 
+                await _gameRepository.Lend(id, friendId ?? 0);
+                await db.SaveChangesAsync();
+
+                ViewBag.Success = $"O jogo {game.Title} foi emprestado com sucesso.";
+                TransportViewData();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));                
+            }
+
+            return View(ModelMapper.MapGameViewModel(game));
+        }
+
+        [RequireConnection]
+        public async Task<ActionResult> GiveBack(int id)
+        {
+            var game = await _gameRepository.FindAsync(id);
+            if (game == null)
+                return HttpNotFound();
+
+            return View(ModelMapper.MapGameViewModel(game));
+        }
+
+        [RequireConnection]
+        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("GiveBack")]
+        public async Task<ActionResult> GiveBackConfirmed(int id)
+        {
+            var game = await _gameRepository.FindAsync(id);
+            if (game == null)
+                return HttpNotFound();
+
+            try
+            {
+                await _gameRepository.GiveBack(id);
+                await db.SaveChangesAsync();
+
+                ViewBag.Success = "O jogo foi devolvido com sucesso.";
+                TransportViewData();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
+            }
+
+            return View(ModelMapper.MapGameViewModel(game));
+        }
+
+        [RequireConnection]
         public async Task<ActionResult> Remove(int id)
         {
             var game = await _gameRepository.FindAsync(id);
