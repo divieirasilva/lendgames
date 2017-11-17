@@ -1,4 +1,5 @@
 ﻿using LendGames.Database.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace LendGames.Web.MvcApp.ViewModels

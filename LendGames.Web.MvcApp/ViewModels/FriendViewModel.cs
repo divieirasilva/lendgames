@@ -20,5 +20,8 @@ namespace LendGames.Web.MvcApp.ViewModels
         [Required(ErrorMessage = "O e-mail deve ser informado.")]
         [MaxLength(1024, ErrorMessage = "O e-mail deve conter no máximo {1} letras.")]
         public string Email { get; set; }
+
+        [Display(Name = "Jogos Emprestados")]
+        public List<GameViewModel> LendedGames { get; set; }
     }
 }

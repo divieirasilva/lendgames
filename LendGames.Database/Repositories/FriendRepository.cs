@@ -1,6 +1,7 @@
 ﻿using LendGames.Database.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -58,6 +59,12 @@ namespace LendGames.Database.Repositories
                 Update(existingFriend);
             }
 
+        }
+
+        public async Task<List<Game>> GetLendedGames(int id)
+        {
+            var games = await _gameRepository.Where(g => g.FriendId == id).ToListAsync();
+            return games;
         }
     }
 }

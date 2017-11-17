@@ -32,10 +32,18 @@
             {
                 <div class="col-lg-4">Você possui <strong>@Model.TotalFriends</strong> amigos.</div>
             }
-        </div>
+        </div>                
     </div>
     <div class="panel-footer">
-        <a href="/Game/Edit" class="btn btn-default">Novo Jogo</a>
-        <a href="/Friend/Edit" class="btn btn-default">Novo Amigo</a>
+        <a href="/Game/Edit" class="btn btn-sm btn-default">Novo Jogo</a>
+        <a href="/Friend/Edit" class="btn btn-sm btn-default">Novo Amigo</a>
+        @if (Model.LastConnection != null)
+        {
+            <p class="pull-right">*Sua última conexão foi em <strong>@($"{Model.LastConnection:dd/MM/yyyy HH:mm:ss}")</strong></p>
+        }
+        else
+        {
+            <p class="pull-right">*Esta é sua primeira conexão, seja bem-vindo.</p>
+        }
     </div>
 </div>

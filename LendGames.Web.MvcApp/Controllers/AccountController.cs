@@ -45,7 +45,8 @@ namespace LendGames.Web.MvcApp.Controllers
                 TotalFriends = friends.Count,
                 TotalGames = games.Count,
                 TotalLendedGames = lendedGames.Count,
-                AccountName = connectedAccount.Username
+                AccountName = connectedAccount.Username,
+                LastConnection = connectedAccount.LastConnection
             };
 
             return PartialView("_DashboardInfo", dashboardData);
@@ -79,14 +80,14 @@ namespace LendGames.Web.MvcApp.Controllers
                 .ToListAsync();
 
             ViewBag.Search = search;
-            return PartialView("_AccountsList", accounts.Select(a => MapAccountViewModel(a)));
+            return PartialView("_AccountsList", accounts.Select(a => ModelMapper.MapAccountViewModel(a)));
         }
 
         [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
         public async Task<ActionResult> Edit(int id = 0)
         {
             var account = await _accountRepository.FindAsync(id);
-            return View(MapAccountViewModel(account));
+            return View(ModelMapper.MapAccountViewModel(account));
         }
 
         [HttpPost]
@@ -103,7 +104,7 @@ namespace LendGames.Web.MvcApp.Controllers
             {
                 try
                 {
-                    var account = MapAccount(accountViewModel);
+                    var account = ModelMapper.MapAccount(accountViewModel);
 
                     await _accountRepository.CreateOrEditAsync(account);
                     await db.SaveChangesAsync();
@@ -128,7 +129,7 @@ namespace LendGames.Web.MvcApp.Controllers
             if (account == null)
                 return HttpNotFound();
 
-            return View(MapAccountViewModel(account));
+            return View(ModelMapper.MapAccountViewModel(account));
         }
 
         [ValidateAntiForgeryToken]
@@ -154,7 +155,7 @@ namespace LendGames.Web.MvcApp.Controllers
                 ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
             }
 
-            return View(MapAccountViewModel(account));
+            return View(ModelMapper.MapAccountViewModel(account));
         }
 
         [RequireConnection(RequireTypes = new AccountType[] { AccountType.Administrator })]
@@ -164,7 +165,7 @@ namespace LendGames.Web.MvcApp.Controllers
             if (account == null)
                 return HttpNotFound();
 
-            return View(MapAccountViewModel(account));
+            return View(ModelMapper.MapAccountViewModel(account));
         }
 
         [ValidateAntiForgeryToken]
@@ -190,7 +191,7 @@ namespace LendGames.Web.MvcApp.Controllers
                 ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
             }
 
-            return View(MapAccountViewModel(account));
+            return View(ModelMapper.MapAccountViewModel(account));
         }
 
         [RequireConnection]
@@ -254,37 +255,6 @@ namespace LendGames.Web.MvcApp.Controllers
         {
             Session.Abandon();
             return RedirectToAction("Index", "Home");
-        }
-
-        private AccountViewModel MapAccountViewModel(Account account)
-        {
-            var accountViewModel = new AccountViewModel();
-
-            if (account != null)
-            {
-                accountViewModel.Id = account.Id;
-                accountViewModel.Username = account.Username;
-                accountViewModel.Email = account.Email;
-                accountViewModel.Type = account.Type;
-                accountViewModel.Enabled = account.Enabled;
-            }
-
-            return accountViewModel;
-        }
-
-        private Account MapAccount(AccountViewModel accountViewModel)
-        {
-            var account = new Account
-            {
-                Id = accountViewModel.Id,
-                Email = accountViewModel.Email,
-                Username = accountViewModel.Username,
-                Enabled = accountViewModel.Enabled,
-                Password = accountViewModel.Password,
-                Type = accountViewModel.Type
-            };
-
-            return account;
         }
     }
 }

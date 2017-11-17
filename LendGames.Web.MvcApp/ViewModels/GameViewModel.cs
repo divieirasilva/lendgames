@@ -16,6 +16,13 @@ namespace LendGames.Web.MvcApp.ViewModels
         public string Title { get; set; }
 
         [Display(Name = "Emprestado")]
-        public bool IsLended { get; set; }
+        public bool IsLended { get; set; }        
+        public string LendedFor { get; set; }
+        public int LendedForId { get; set; }
+
+        [Display(Name = "Capa")]
+        public string CoverFileName { get; set; }
+
+        public HttpPostedFileBase CoverFile { get; set; }
     }
 }

@@ -15,6 +15,10 @@ namespace LendGames.Database.Models
 
         public int? FriendId { get; set; }
         public virtual Friend Friend { get; set; }
+        
+        public string CoverFileName { get; set; }        
+        public byte[] CoverFileData { get; set; }
+        public string CoverFileType { get; set; }
 
         [NotMapped]
         public bool IsLended

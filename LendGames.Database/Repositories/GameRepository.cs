@@ -49,6 +49,9 @@ namespace LendGames.Database.Repositories
             {
                 var existingGame = await FindAsync(game.Id);
                 existingGame.Title = game.Title;
+                existingGame.CoverFileData = game.CoverFileData;
+                existingGame.CoverFileName = game.CoverFileName;
+                existingGame.CoverFileType = game.CoverFileType;
 
                 Update(existingGame);
             }

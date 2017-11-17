@@ -48,14 +48,14 @@ namespace LendGames.Web.MvcApp.Controllers
                 .ToListAsync();            
 
             ViewBag.Search = search;
-            return PartialView("_FriendsList", friends.Select(f => MapFriendViewModel(f)));
+            return PartialView("_FriendsList", friends.Select(f => ModelMapper.MapFriendViewModel(f)));
         }
 
         [RequireConnection]
         public async Task<ActionResult> Edit(int id = 0)
         {
             var friend = await _friendRepository.FindAsync(id);
-            return View(MapFriendViewModel(friend));
+            return View(ModelMapper.MapFriendViewModel(friend));
         }
 
         [HttpPost]
@@ -67,7 +67,7 @@ namespace LendGames.Web.MvcApp.Controllers
             {
                 try
                 {
-                    var friend = MapFriend(friendViewModel);
+                    var friend = ModelMapper.MapFriend(friendViewModel);
 
                     await _friendRepository.CreateOrEditAsync(friend);
                     await db.SaveChangesAsync();
@@ -92,7 +92,7 @@ namespace LendGames.Web.MvcApp.Controllers
             if (friend == null)
                 return HttpNotFound();
 
-            return View(MapFriendViewModel(friend));
+            return View(ModelMapper.MapFriendViewModel(friend));
         }
 
         [RequireConnection]
@@ -118,33 +118,7 @@ namespace LendGames.Web.MvcApp.Controllers
                 ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));
             }
 
-            return View(MapFriendViewModel(friend));
-        }
-
-        private FriendViewModel MapFriendViewModel(Friend friend)
-        {
-            var friendViewModel = new FriendViewModel();
-
-            if (friend != null)
-            {
-                friendViewModel.Id = friend.Id;
-                friendViewModel.Name = friend.Name;
-                friendViewModel.Email = friend.Email;
-            }
-
-            return friendViewModel;
-        }
-
-        private Friend MapFriend(FriendViewModel friendViewModel)
-        {
-            var friend = new Friend
-            {
-                Id = friendViewModel.Id,
-                Email = friendViewModel.Email,
-                Name = friendViewModel.Name
-            };
-
-            return friend;
+            return View(ModelMapper.MapFriendViewModel(friend));
         }
     }
 }

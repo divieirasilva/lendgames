@@ -10,6 +10,7 @@ namespace LendGames.Web.MvcApp.ViewModels
         public int TotalGames { get; set; }
         public int TotalFriends { get; set; }
         public int TotalLendedGames { get; set; }
-        public string AccountName { get; set; }
+        public string AccountName { get; set; }        
+        public DateTime? LastConnection { get; set; }
     }
 }

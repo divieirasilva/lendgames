@@ -37,21 +37,22 @@ namespace LendGames.Web.MvcApp.Controllers
                 out int skip
             );
 
-            var games = await query
+            var games = await query                
                 .OrderBy(g => g.Title)
                 .Skip(skip)
-                .Take(ItemsPerPage)                
+                .Take(ItemsPerPage)
+                .Include(i => i.Friend)
                 .ToListAsync();
 
             ViewBag.Search = search;
-            return PartialView("_GamesList", games.Select(g => MapGameViewModel(g)));
+            return PartialView("_GamesList", games.Select(g => ModelMapper.MapGameViewModel(g)));
         }        
 
         [RequireConnection]
         public async Task<ActionResult> Edit(int id = 0)
         {
             var game = await _gameRepository.FindAsync(id);
-            return View(MapGameViewModel(game));
+            return View(ModelMapper.MapGameViewModel(game));
         }
 
         [HttpPost]
@@ -63,7 +64,7 @@ namespace LendGames.Web.MvcApp.Controllers
             {
                 try
                 {
-                    var game = MapGame(gameViewModel);
+                    var game = ModelMapper.MapGame(gameViewModel);
 
                     await _gameRepository.CreateOrEditAsync(game);
                     await db.SaveChangesAsync();
@@ -88,7 +89,7 @@ namespace LendGames.Web.MvcApp.Controllers
             if (game == null)
                 return HttpNotFound();
 
-            return View(MapGameViewModel(game));
+            return View(ModelMapper.MapGameViewModel(game));
         }
 
         [RequireConnection]
@@ -114,32 +115,17 @@ namespace LendGames.Web.MvcApp.Controllers
                 ModelState.AddModelError(string.Empty, ExtractEntityMessage(ex));                
             }
 
-            return View(MapGameViewModel(game));
+            return View(ModelMapper.MapGameViewModel(game));
         }
 
-        private GameViewModel MapGameViewModel(Game game)
+        [RequireConnection]
+        public async Task<ActionResult> RenderCover(int id)
         {
-            var gameViewModel = new GameViewModel();
+            var game = await _gameRepository.FindAsync(id);
+            if (game == null || game.CoverFileData == null)
+                return File("/Assets/NoCover.jpg", "image/jpeg");
 
-            if (game != null)
-            {
-                gameViewModel.Id = game.Id;
-                gameViewModel.Title = game.Title;
-                gameViewModel.IsLended = game.IsLended;
-            }
-
-            return gameViewModel;
-        }
-
-        private Game MapGame(GameViewModel gameViewModel)
-        {
-            var game = new Game
-            {
-                Id = gameViewModel.Id,
-                Title = gameViewModel.Title
-            };
-
-            return game;
+            return File(game.CoverFileData, game.CoverFileType);
         }
     }
 }

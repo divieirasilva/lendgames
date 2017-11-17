@@ -4,7 +4,7 @@
     ViewBag.Title = "Gerenciar Jogo";
 }
 
-<form id="GameForm" action="/Game/Edit" method="post">
+<form id="GameForm" action="/Game/Edit" method="post" enctype="multipart/form-data">
 
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.Id)    
@@ -17,6 +17,13 @@
                         @Html.LabelFor(model => model.Title, new { @class = "control-label" })
                         @Html.TextBoxFor(model => model.Title, new { @class = "form-control", autofocus = true })
                         @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CoverFileName, new { @class = "control-label" })
+                        <input type="file" name="CoverFile" />     
+                        @Html.DisplayTextFor(model => model.CoverFileName)
                     </div>
                 </div>
             </div>

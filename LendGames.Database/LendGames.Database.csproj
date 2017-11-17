@@ -56,6 +56,10 @@
     <Compile Include="Migrations\201711161648043_AddedGameAndFriendEntities.Designer.cs">
       <DependentUpon>201711161648043_AddedGameAndFriendEntities.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711170015202_AddedGameCoverFields.cs" />
+    <Compile Include="Migrations\201711170015202_AddedGameCoverFields.Designer.cs">
+      <DependentUpon>201711170015202_AddedGameCoverFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Friend.cs" />
@@ -83,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711161648043_AddedGameAndFriendEntities.resx">
       <DependentUpon>201711161648043_AddedGameAndFriendEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711170015202_AddedGameCoverFields.resx">
+      <DependentUpon>201711170015202_AddedGameCoverFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
